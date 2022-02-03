@@ -1,6 +1,6 @@
 # Kotlin-Compose-MVVM
 
-![demo](https://github.com/bij-ace/Kotlin-Compose-MVVM/blob/master/demo.gif =600x800)
+![demo]<img src="https://fullpath/assets/yourgif.gif" width="600" height="800">
 
 - Jetpack Compose
 - Kotlin Coroutine
