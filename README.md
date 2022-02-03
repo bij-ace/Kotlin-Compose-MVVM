@@ -1,6 +1,6 @@
 # Kotlin-Compose-MVVM
 
-<img src="https://github.com/bij-ace/Kotlin-Compose-MVVM/blob/master/demo.gif" width="500" height="800">
+<img src="https://github.com/bij-ace/Kotlin-Compose-MVVM/blob/master/demo.gif" width="450" height="800">
 
 - Jetpack Compose
 - Kotlin Coroutine
