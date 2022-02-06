@@ -3,6 +3,7 @@
 - Jetpack Compose
 - Kotlin Coroutine
 - MVVM
+- Room Database
 - Retrofit
 - Search bar
 - Navigation Drawer
