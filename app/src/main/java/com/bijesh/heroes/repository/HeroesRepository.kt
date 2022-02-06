@@ -1,6 +1,8 @@
 package com.bijesh.heroes.repository
 
+import android.app.Application
 import com.bijesh.heroes.api.HeroesService
+import com.bijesh.heroes.database.HeroesDatabase
 import com.bijesh.heroes.model.HeroesResponse
 
 class HeroesRepository(val heroesService: HeroesService = HeroesService()) {
@@ -16,8 +18,15 @@ class HeroesRepository(val heroesService: HeroesService = HeroesService()) {
         }
     }
 
-    suspend fun getAllHeroesList(): List<HeroesResponse> {
-        cachedHeroes = heroesService.getAllHeroesList()
+    suspend fun getAllHeroesList(application: Application): List<HeroesResponse> {
+        val dao = HeroesDatabase.getDatabaseInstance(application).heroesDao
+        if (dao.getAllHeroes().isEmpty()) {
+            cachedHeroes = heroesService.getAllHeroesList()
+            for (hero in cachedHeroes) {
+                dao.insertHeroes(hero)
+            }
+        }
+        cachedHeroes = dao.getAllHeroes()
         return cachedHeroes
     }
 

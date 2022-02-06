@@ -13,14 +13,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.bijesh.heroes.ui.Drawer
 import com.bijesh.heroes.ui.TopBar
 import com.bijesh.heroes.ui.composables.herodetails.HeroDetailsScreen
 import com.bijesh.heroes.ui.composables.herolist.HeroListScreen
+import com.bijesh.heroes.ui.composables.herolist.HeroListViewModel
 import com.bijesh.heroes.ui.composables.search.SearchScreen
 import com.bijesh.heroes.ui.theme.HeroesTheme
+import com.bijesh.heroes.utils.factory.HeroListViewModelInjector
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
@@ -29,9 +32,13 @@ class MainActivity : ComponentActivity() {
     @ExperimentalAnimationApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // this is an example to create a factory if we need to pass additional parameters to viewmodel
+        // if not, viewmodel can be directly instantiated as shown in HeroDetailsScreen
+        val factory = HeroListViewModelInjector(application).provideHeroListViewModelFactory()
+        val viewModel = ViewModelProvider(this, factory)[HeroListViewModel::class.java]
         setContent {
             HeroesTheme {
-                MainScreen()
+                MainScreen(viewModel)
             }
         }
     }
@@ -39,7 +46,7 @@ class MainActivity : ComponentActivity() {
 
 @ExperimentalAnimationApi
 @Composable
-fun MainScreen() {
+fun MainScreen(viewModel: HeroListViewModel?) {
     val scaffoldState = rememberScaffoldState(rememberDrawerState(DrawerValue.Closed))
     val scope = rememberCoroutineScope()
     val navController = rememberAnimatedNavController()
@@ -58,7 +65,7 @@ fun MainScreen() {
             composable(
                 route = "search_screen"
             ) {
-                SearchScreen() {
+                SearchScreen(viewModel) {
                     val heroId = it.id
                     navController.navigate("hero_details_screen/$heroId")
                     isSecondaryScreen.value = true
@@ -71,7 +78,7 @@ fun MainScreen() {
                 })
             ) {
                 val universe = it.arguments?.getString("universe")
-                HeroListScreen(universe) {
+                HeroListScreen(viewModel, universe) {
                     val heroId = it.id
                     navController.navigate("hero_details_screen/$heroId")
                     isSecondaryScreen.value = true
@@ -113,5 +120,5 @@ fun MainScreen() {
 @Preview(showBackground = true)
 @Composable
 fun MainScreenPreview() {
-    MainScreen()
+    MainScreen(null)
 }

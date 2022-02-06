@@ -10,14 +10,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bijesh.heroes.model.HeroesResponse
 import com.bijesh.heroes.ui.composables.HeroCard
 
 @Composable
-fun HeroListScreen(universe: String?, cardClickCallback: (HeroesResponse) -> Unit) {
-    val viewModel: HeroListViewModel = viewModel()
-    viewModel.getHeroListFilteredByPublisher(universe)
+fun HeroListScreen(viewModel: HeroListViewModel?, universe: String?, cardClickCallback: (HeroesResponse) -> Unit) {
+    viewModel!!.getHeroListFilteredByPublisher(universe)
     val heroes = viewModel.heroesState.value
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -34,5 +32,5 @@ fun HeroListScreen(universe: String?, cardClickCallback: (HeroesResponse) -> Uni
 @Preview(showBackground = true)
 @Composable
 fun HeroListScreenPreview() {
-    HeroListScreen("marvel", {})
+    HeroListScreen(null, "marvel", {})
 }

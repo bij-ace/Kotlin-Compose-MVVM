@@ -1,5 +1,6 @@
 package com.bijesh.heroes.ui.composables.herolist
 
+import android.app.Application
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,7 +9,10 @@ import com.bijesh.heroes.repository.HeroesRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class HeroListViewModel(private val repo: HeroesRepository = HeroesRepository.getInstance()): ViewModel() {
+class HeroListViewModel(
+    private val repo: HeroesRepository,
+    private val application: Application
+) : ViewModel() {
 
     val heroesState = mutableStateOf(emptyList<HeroesResponse>())
 
@@ -18,7 +22,7 @@ class HeroListViewModel(private val repo: HeroesRepository = HeroesRepository.ge
 
     private fun getAllHeroesList() {
         viewModelScope.launch(Dispatchers.IO) {
-            val heroes = repo.getAllHeroesList()
+            val heroes = repo.getAllHeroesList(application)
             heroesState.value = heroes
         }
     }
@@ -28,7 +32,7 @@ class HeroListViewModel(private val repo: HeroesRepository = HeroesRepository.ge
             getAllHeroesList()
         } else {
             heroesState.value = heroesState.value.filter { it ->
-                it.name.contains(keyword)
+                it.name!!.contains(keyword)
             }
         }
     }

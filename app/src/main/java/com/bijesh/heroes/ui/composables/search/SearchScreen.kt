@@ -15,15 +15,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bijesh.heroes.model.HeroesResponse
 import com.bijesh.heroes.ui.composables.HeroCard
 import com.bijesh.heroes.ui.composables.herolist.HeroListViewModel
 
 @Composable
-fun SearchScreen(cardClickCallback: (HeroesResponse) -> Unit) {
-    val viewModel: HeroListViewModel = viewModel()
-    val heroes = viewModel.heroesState.value
+fun SearchScreen(viewModel: HeroListViewModel?, cardClickCallback: (HeroesResponse) -> Unit) {
+    val heroes = viewModel!!.heroesState.value
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -66,5 +64,5 @@ fun SearchScreen(cardClickCallback: (HeroesResponse) -> Unit) {
 @Preview(showBackground = true)
 @Composable
 fun SearchScreenPreview() {
-    SearchScreen({})
+    SearchScreen(null, {})
 }

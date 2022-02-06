@@ -61,7 +61,7 @@ fun HeroCard(hero: HeroesResponse, cardClickCallback: (HeroesResponse) -> Unit) 
                 modifier = bioModifier
             ) {
                 Text(
-                    text = hero.name,
+                    text = "${hero.name}",
                     style = MaterialTheme.typography.h5
                 )
                 Text(
