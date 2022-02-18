@@ -24,7 +24,13 @@ import com.bijesh.heroes.ui.composables.HeroCard
 fun SearchScreen(viewModel: SearchViewModel?, cardClickCallback: (HeroesResponse) -> Unit) {
     val heroes = viewModel!!.heroesState.value
 
+    /* To recompose the list after favoriting a card */
     val favs = remember { mutableStateMapOf<Int, Boolean>() }
+
+    /* This will clear and re-initialize favs if the list items are changed */
+    /* (For eg: filtering from search bar) */
+    /* If this is not done,
+    previously clicked fav state of card will be shown in new list also */
     remember(heroes) {
         if (favs.isNotEmpty()) {
             favs.clear()
