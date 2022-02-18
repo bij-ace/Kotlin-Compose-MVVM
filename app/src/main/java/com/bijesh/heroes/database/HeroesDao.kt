@@ -10,9 +10,12 @@ import com.bijesh.heroes.model.HeroesResponse
 interface HeroesDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertHeroes(heores: HeroesResponse)
+    suspend fun insertOrUpdateHeroes(heroes: HeroesResponse): Long
 
     @Query("SELECT * FROM heroes")
     suspend fun getAllHeroes(): List<HeroesResponse>
+
+    @Query("SELECT * FROM heroes WHERE name LIKE '%'||:param||'%'")
+    suspend fun filterHeroesList(param: String): List<HeroesResponse>
 
 }

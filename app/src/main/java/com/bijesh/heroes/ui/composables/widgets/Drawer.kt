@@ -63,11 +63,11 @@ fun Drawer(scope: CoroutineScope, scaffoldState: ScaffoldState, navController: N
                     // Pop up to the start destination of the graph to
                     // avoid building up a large stack of destinations
                     // on the back stack as users select items
-//                    navController.graph.startDestinationRoute?.let { route ->
-//                        popUpTo(route) {
-//                            saveState = true
-//                        }
-//                    }
+                    navController.graph.startDestinationRoute?.let { route ->
+                        popUpTo(route) {
+                            saveState = true
+                        }
+                    }
                     // Avoid multiple copies of the same destination when
                     // reselecting the same item
                     launchSingleTop = true

@@ -1,4 +1,4 @@
-package com.bijesh.heroes.ui.composables.herolist
+package com.bijesh.heroes.ui.composables.search
 
 import android.app.Application
 import androidx.compose.runtime.mutableStateOf
@@ -9,7 +9,7 @@ import com.bijesh.heroes.repository.HeroesRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class HeroListViewModel(
+class SearchViewModel(
     private val repo: HeroesRepository,
     private val application: Application
 ) : ViewModel() {
@@ -27,9 +27,13 @@ class HeroListViewModel(
         }
     }
 
-    fun getHeroListFilteredByPublisher(publisher: String?) {
-        viewModelScope.launch(Dispatchers.IO) {
-            heroesState.value = repo.getHeroListFilteredByPublisher(application, publisher = publisher)
+    fun filterHeroesList(keyword: String) {
+        if (keyword == "") {
+            getAllHeroesList()
+        } else {
+            viewModelScope.launch(Dispatchers.IO) {
+                heroesState.value = repo.filterHeroesList(application, keyword)
+            }
         }
     }
 

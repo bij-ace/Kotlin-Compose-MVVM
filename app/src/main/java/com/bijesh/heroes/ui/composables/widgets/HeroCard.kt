@@ -15,14 +15,23 @@ import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
+import com.bijesh.heroes.R
 import com.bijesh.heroes.model.HeroesResponse
 
 @Composable
-fun HeroCard(hero: HeroesResponse, cardClickCallback: (HeroesResponse) -> Unit) {
+fun HeroCard(
+    index: Int,
+    hero: HeroesResponse,
+    fav: Boolean,
+    favoriteClickCallback: (Int, Boolean, HeroesResponse) -> Unit,
+    cardClickCallback: (HeroesResponse) -> Unit
+) {
     var isExpanded by remember { mutableStateOf(false) }
+
     var bioModifier = if (isExpanded)
         Modifier
             .fillMaxWidth(0.8f)
@@ -30,6 +39,11 @@ fun HeroCard(hero: HeroesResponse, cardClickCallback: (HeroesResponse) -> Unit) 
         Modifier
             .fillMaxWidth(0.8f)
             .height(150.dp)
+
+    fun favClicked(selected: Boolean) {
+        favoriteClickCallback(index, selected, hero)
+    }
+
     Card(
         shape = RoundedCornerShape(4.dp),
         elevation = 2.dp,
@@ -44,18 +58,30 @@ fun HeroCard(hero: HeroesResponse, cardClickCallback: (HeroesResponse) -> Unit) 
                 .padding(16.dp)
                 .animateContentSize()
         ) {
-            Image(
-                painter = rememberImagePainter(
-                    data = hero.images?.md,
-                    builder = {
-                        transformations(CircleCropTransformation())
-                    }
-                ),
-                contentDescription = null,
-                modifier = Modifier
-                    .size(88.dp)
-                    .padding(top = 5.dp)
-            )
+            Column {
+                Image(
+                    painter = rememberImagePainter(
+                        data = hero.images?.md,
+                        builder = {
+                            transformations(CircleCropTransformation())
+                        }
+                    ),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(88.dp)
+                        .padding(top = 5.dp)
+                        .align(Alignment.CenterHorizontally)
+                )
+                Image(
+                    painter = painterResource(id = if (fav) R.drawable.favorite_selected else R.drawable.favorite_unselected),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .padding(top = 8.dp)
+                        .size(40.dp)
+                        .align(Alignment.CenterHorizontally)
+                        .clickable { favClicked(!fav) }
+                )
+            }
             Spacer(modifier = Modifier.width(16.dp))
             Column(
                 modifier = bioModifier

@@ -22,23 +22,25 @@ import com.bijesh.heroes.ui.composables.herodetails.HeroDetailsScreen
 import com.bijesh.heroes.ui.composables.herolist.HeroListScreen
 import com.bijesh.heroes.ui.composables.herolist.HeroListViewModel
 import com.bijesh.heroes.ui.composables.search.SearchScreen
+import com.bijesh.heroes.ui.composables.search.SearchViewModel
 import com.bijesh.heroes.ui.theme.HeroesTheme
-import com.bijesh.heroes.utils.factory.HeroListViewModelInjector
+import com.bijesh.heroes.utils.factory.ViewModelInjector
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 
 class MainActivity : ComponentActivity() {
-    @ExperimentalAnimationApi
+    @OptIn(ExperimentalAnimationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // this is an example to create a factory if we need to pass additional parameters to viewmodel
         // if not, viewmodel can be directly instantiated as shown in HeroDetailsScreen
-        val factory = HeroListViewModelInjector(application).provideHeroListViewModelFactory()
-        val viewModel = ViewModelProvider(this, factory)[HeroListViewModel::class.java]
+        val factory = ViewModelInjector(application)
+        val heroListViewModel = ViewModelProvider(this, factory.provideHeroListViewModelFactory())[HeroListViewModel::class.java]
+        val searchViewModel = ViewModelProvider(this, factory.provideSearchViewModelFactory())[SearchViewModel::class.java]
         setContent {
             HeroesTheme {
-                MainScreen(viewModel)
+                MainScreen(heroListViewModel, searchViewModel)
             }
         }
     }
@@ -46,7 +48,7 @@ class MainActivity : ComponentActivity() {
 
 @ExperimentalAnimationApi
 @Composable
-fun MainScreen(viewModel: HeroListViewModel?) {
+fun MainScreen(heroListViewModel: HeroListViewModel?, searchViewModel: SearchViewModel?) {
     val scaffoldState = rememberScaffoldState(rememberDrawerState(DrawerValue.Closed))
     val scope = rememberCoroutineScope()
     val navController = rememberAnimatedNavController()
@@ -65,7 +67,7 @@ fun MainScreen(viewModel: HeroListViewModel?) {
             composable(
                 route = "search_screen"
             ) {
-                SearchScreen(viewModel) {
+                SearchScreen(searchViewModel) {
                     val heroId = it.id
                     navController.navigate("hero_details_screen/$heroId")
                     isSecondaryScreen.value = true
@@ -78,7 +80,7 @@ fun MainScreen(viewModel: HeroListViewModel?) {
                 })
             ) {
                 val universe = it.arguments?.getString("universe")
-                HeroListScreen(viewModel, universe) {
+                HeroListScreen(heroListViewModel, universe) {
                     val heroId = it.id
                     navController.navigate("hero_details_screen/$heroId")
                     isSecondaryScreen.value = true
@@ -120,5 +122,5 @@ fun MainScreen(viewModel: HeroListViewModel?) {
 @Preview(showBackground = true)
 @Composable
 fun MainScreenPreview() {
-    MainScreen(null)
+    MainScreen(null, null)
 }

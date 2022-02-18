@@ -23,19 +23,31 @@ class HeroesRepository(val heroesService: HeroesService = HeroesService()) {
         if (dao.getAllHeroes().isEmpty()) {
             cachedHeroes = heroesService.getAllHeroesList()
             for (hero in cachedHeroes) {
-                dao.insertHeroes(hero)
+                dao.insertOrUpdateHeroes(hero)
             }
         }
         cachedHeroes = dao.getAllHeroes()
         return cachedHeroes
     }
 
-    fun getHeroListFilteredByPublisher(publisher: String?): List<HeroesResponse> {
-        return cachedHeroes.filter { it.biography?.publisher == publisher }
+    suspend fun filterHeroesList(application: Application, keyword: String): List<HeroesResponse> {
+        val dao = HeroesDatabase.getDatabaseInstance(application).heroesDao
+        return dao.filterHeroesList(keyword)
+    }
+
+    suspend fun getHeroListFilteredByPublisher(application: Application, publisher: String?): List<HeroesResponse> {
+        val dao = HeroesDatabase.getDatabaseInstance(application).heroesDao
+        val tempHeroes = dao.getAllHeroes()
+        return tempHeroes.filter { it.biography?.publisher == publisher }
     }
 
     fun getHeroDetails(heroId: Int?): HeroesResponse? {
         return cachedHeroes.find { it.id == heroId }
+    }
+
+    suspend fun updateHeroes(application: Application, hero: HeroesResponse): Long {
+        val dao = HeroesDatabase.getDatabaseInstance(application).heroesDao
+        return dao.insertOrUpdateHeroes(hero)
     }
 
 }
