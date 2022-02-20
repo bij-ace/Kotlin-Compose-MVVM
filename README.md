@@ -22,3 +22,7 @@
 - Write tests
 - Fix bugs
 - Further break down composables maybe
+
+## Credits
+- Superheroes API: https://akabab.github.io/superhero-api/api/
+- All the respective owners
