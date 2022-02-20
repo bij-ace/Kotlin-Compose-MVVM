@@ -10,7 +10,7 @@
 - Search bar
 - Navigation Drawer
 - Animations (screen transition, content expansion)
-- Mark as favorite
+- Mark as favorite (showcasing recomposition of LazyColumn)
 
 ## Demo
 <img src="https://github.com/bij-ace/Kotlin-Compose-MVVM/blob/master/demo.gif" width="400" height="800">&nbsp;&nbsp;&nbsp;<img src="https://github.com/bij-ace/Kotlin-Compose-MVVM/blob/master/favorite.png" width="400" height="800">
