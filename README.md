@@ -19,6 +19,7 @@
 <img src="https://github.com/bij-ace/Kotlin-Compose-MVVM/blob/master/mvvm%20architecture.png" width="600" height="500">
 
 ## To-do
+- Dependency Injection
 - Write tests
 - Fix bugs
 - Further break down composables maybe
